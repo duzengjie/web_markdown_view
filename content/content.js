@@ -121,11 +121,16 @@
     initToolbar();
   }
 
+  // 检查是否为默认匹配的 Markdown 文件 URL
+  function isDefaultMatch(url) {
+    return /\.md(\?.*)?(#.*)?(\/\*)?\/?$/i.test(url) || /\.md\/raw/i.test(url) || /\.md\b/i.test(url.split('?')[0].split('#')[0]);
+  }
+
   // 初始化
   function initToolbar() {
     chrome.storage.sync.get({ rules: [] }, function(data) {
       const currentUrl = window.location.href;
-      const isMatched = checkUrlMatch(currentUrl, data.rules);
+      const isMatched = isDefaultMatch(currentUrl) || checkUrlMatch(currentUrl, data.rules);
       createToolbar(isMatched);
     });
   }

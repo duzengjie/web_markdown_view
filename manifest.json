@@ -20,7 +20,7 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["content/converter.js", "content/content.js"],
+      "js": ["content/converter.js", "content/renderer.js", "content/content.js"],
       "css": ["styles/toolbar.css", "styles/viewer.css"],
       "run_at": "document_idle"
     }

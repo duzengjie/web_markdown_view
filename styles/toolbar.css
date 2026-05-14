@@ -1,0 +1,83 @@
+/* 浮动工具栏样式 */
+.md-viewer-toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2147483647;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  background: #1a1a2e;
+  color: #e0e0e0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  line-height: 1.5;
+}
+
+.md-viewer-toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.md-viewer-toolbar-status {
+  font-size: 12px;
+  color: #8b949e;
+}
+
+.md-viewer-toolbar-btn {
+  padding: 6px 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.md-viewer-toolbar-btn-primary {
+  background: #238636;
+  color: #ffffff;
+}
+
+.md-viewer-toolbar-btn-primary:hover {
+  background: #2ea043;
+}
+
+.md-viewer-toolbar-btn-secondary {
+  background: #30363d;
+  color: #c9d1d9;
+}
+
+.md-viewer-toolbar-btn-secondary:hover {
+  background: #484f58;
+}
+
+.md-viewer-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.md-viewer-toolbar-close {
+  background: none;
+  border: none;
+  color: #8b949e;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px 8px;
+  line-height: 1;
+  border-radius: 4px;
+}
+
+.md-viewer-toolbar-close:hover {
+  color: #f0f0f0;
+  background: #30363d;
+}
+
+body.md-viewer-has-toolbar {
+  padding-top: 48px !important;
+}

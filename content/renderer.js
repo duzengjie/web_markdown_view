@@ -109,9 +109,13 @@ const MarkdownRenderer = {
 
   _renderInline(text) {
     // 图片（在链接之前处理）
-    text = text.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img alt="$1" src="$2">');
+    text = text.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_, alt, src) => {
+      return '<img alt="' + this._escapeHtml(alt) + '" src="' + this._sanitizeUrl(src) + '">';
+    });
     // 链接
-    text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+    text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, text, href) => {
+      return '<a href="' + this._sanitizeUrl(href) + '">' + this._renderInline(text) + '</a>';
+    });
     // 加粗
     text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
     // 斜体
@@ -156,5 +160,21 @@ const MarkdownRenderer = {
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;');
+  },
+
+  _sanitizeUrl(url) {
+    try {
+      const parsed = new URL(url);
+      if (parsed.protocol === 'javascript:' || parsed.protocol === 'data:') {
+        return '';
+      }
+    } catch (e) {
+      // 相对路径等无效 URL，尝试用 location 解析
+      if (url && !url.toLowerCase().startsWith('javascript:') && !url.toLowerCase().startsWith('data:')) {
+        return this._escapeHtml(url);
+      }
+      return '';
+    }
+    return this._escapeHtml(url);
   }
 };

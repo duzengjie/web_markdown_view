@@ -8,13 +8,11 @@
   let isMarkdownView = false;
   let toolbar = null;
 
-  // URL 匹配
+  // URL 匹配（Chrome match pattern → 正则）
   function matchUrl(pattern, url) {
     const regexStr = pattern
       .replace(/[.+^${}()|[\]\\]/g, '\\$&')
-      .replace(/\*/g, '.*')
-      .replace(/:\/\//g, '://')
-      .replace(/\.\*/g, '.*');
+      .replace(/\*/g, '.*');
     try {
       const regex = new RegExp('^' + regexStr + '$');
       return regex.test(url);
@@ -74,9 +72,6 @@
       toolbar.remove();
       toolbar = null;
       document.body.classList.remove('md-viewer-has-toolbar');
-    }
-    if (isMarkdownView) {
-      restoreOriginal();
     }
   }
 
@@ -156,9 +151,7 @@
     }
 
     if (request.action === 'rulesUpdated') {
-      if (toolbar) {
-        removeToolbar();
-      }
+      removeToolbar();
       if (isMarkdownView) {
         restoreOriginal();
       }

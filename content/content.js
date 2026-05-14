@@ -131,7 +131,9 @@
     chrome.storage.sync.get({ rules: [] }, function(data) {
       const currentUrl = window.location.href;
       const isMatched = isDefaultMatch(currentUrl) || checkUrlMatch(currentUrl, data.rules);
-      createToolbar(isMatched);
+      if (isMatched) {
+        createToolbar(true);
+      }
     });
   }
 

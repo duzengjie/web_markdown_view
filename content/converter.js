@@ -120,7 +120,12 @@ const MarkdownConverter = {
     if (tag === 'PRE') {
       const codeEl = node.querySelector('code');
       const codeText = codeEl ? codeEl.textContent : node.textContent;
-      parts.push('\n\n```\n' + codeText + '\n```\n\n');
+      // 如果内容本身包含 Markdown 模式（标题、代码块等），直接输出不包裹
+      if (this._looksLikeMarkdown(codeText)) {
+        parts.push('\n\n' + codeText + '\n\n');
+      } else {
+        parts.push('\n\n```\n' + codeText + '\n```\n\n');
+      }
       return;
     }
 
@@ -232,5 +237,27 @@ const MarkdownConverter = {
     md = md.replace(/\n{3,}/g, '\n\n');
     md = md.trim();
     return md + '\n';
+  },
+
+  // 检测文本是否像 Markdown（包含标题、代码块、列表等模式）
+  _looksLikeMarkdown(text) {
+    if (!text) return false;
+    const mdPatterns = [
+      /^#{1,6}\s+/m,           // 标题 # ## ###
+      /^```/m,                  // 代码块
+      /^\* .+/m,                // 无序列表
+      /^- .+/m,                 // 无序列表
+      /^\d+\. .+/m,             // 有序列表
+      /^\|.*\|/m,               // 表格
+      /^>\s+/m,                 // 引用
+      /\*\*.+?\*\*/,            // 加粗
+      /\[.+\]\(.+\)/,           // 链接
+    ];
+    let matchCount = 0;
+    for (const p of mdPatterns) {
+      if (p.test(text)) matchCount++;
+    }
+    // 匹配 2 个以上模式则认为是 Markdown
+    return matchCount >= 2;
   }
 };

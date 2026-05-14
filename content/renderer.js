@@ -113,8 +113,8 @@ const MarkdownRenderer = {
       return '<img alt="' + this._escapeHtml(alt) + '" src="' + this._sanitizeUrl(src) + '">';
     });
     // 链接
-    text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, text, href) => {
-      return '<a href="' + this._sanitizeUrl(href) + '">' + this._renderInline(text) + '</a>';
+    text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, linkText, href) => {
+      return '<a href="' + this._sanitizeUrl(href) + '">' + this._renderInline(linkText) + '</a>';
     });
     // 加粗
     text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
@@ -129,9 +129,11 @@ const MarkdownRenderer = {
     if (tableLines.length < 2) return '';
 
     const parseRow = (line) => {
-      return line.split('|')
-        .map(cell => cell.trim())
-        .filter((_, idx, arr) => idx > 0 && idx < arr.length);
+      const cells = line.split('|');
+      // 去掉首尾空元素（由前后的 | 产生）
+      if (cells.length > 0 && cells[0].trim() === '') cells.shift();
+      if (cells.length > 0 && cells[cells.length - 1].trim() === '') cells.pop();
+      return cells.map(cell => cell.trim());
     };
 
     const headers = parseRow(tableLines[0]);
